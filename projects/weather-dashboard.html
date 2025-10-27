@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard | Noman Riaz</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-pink: #ff00c8;
+            --primary-cyan: #00e0ff;
+            --primary-violet: #b026ff;
+            --dark-bg: linear-gradient(135deg, #0c0015 0%, #1a0033 100%);
+            --card-bg: rgba(25, 5, 45, 0.7);
+            --text-light: #ffffff;
+            --text-gray: #b3b3b3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+            background: rgba(12, 0, 21, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary-pink), var(--primary-cyan));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-cyan);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-pink);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--primary-cyan);
+        }
+
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        /* Project Hero Section */
+        .project-hero {
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            padding: 150px 0 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(176, 38, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 0, 200, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 80%, rgba(0, 224, 255, 0.1) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        .project-hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .project-hero-text {
+            flex: 1;
+            padding-right: 30px;
+        }
+
+        .project-hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .project-mockup {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: glow 3s infinite alternate;
+        }
+
+        .project-mockup img {
+            width: 100%;
+            display: block;
+        }
+
+        .project-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, var(--primary-pink), var(--primary-cyan));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .project-hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: var(--text-gray);
+            max-width: 600px;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .project-tag {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-pink), var(--primary-violet));
+            color: white;
+            border: none;
+            box-shadow: 0 5px 15px rgba(255, 0, 200, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 0, 200, 0.6);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-cyan);
+            border: 2px solid var(--primary-cyan);
+            box-shadow: 0 0 10px rgba(0, 224, 255, 0.3);
+        }
+
+        .btn-outline:hover {
+            background: rgba(0, 224, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 224, 255, 0.5);
+            transform: translateY(-3px);
+        }
+
+        /* Sections Common Styling */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            display: inline-block;
+            background: linear-gradient(45deg, var(--primary-pink), var(--primary-cyan));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(45deg, var(--primary-pink), var(--primary-cyan));
+            border-radius: 3px;
+        }
+
+        /* Project Details Section */
+        .project-details {
+            display: flex;
+            gap: 50px;
+        }
+
+        .project-info {
+            flex: 1;
+        }
+
+        .project-features {
+            flex: 1;
+        }
+
+        .project-info p {
+            margin-bottom: 20px;
+            color: var(--text-gray);
+            font-size: 1.1rem;
+        }
+
+        .features-list {
+            list-style: none;
+        }
+
+        .features-list li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .features-list li i {
+            color: var(--primary-cyan);
+            margin-right: 10px;
+            margin-top: 5px;
+        }
+
+        /* Technology Stack Section */
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .tech-item {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            width: 150px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .tech-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(176, 38, 255, 0.2);
+        }
+
+        .tech-item i {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-pink);
+        }
+
+        .tech-item h3 {
+            font-size: 1rem;
+            color: var(--text-light);
+        }
+
+        /* Project Gallery Section */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(176, 38, 255, 0.3);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(12, 0, 21, 0.9);
+            padding: 30px 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        footer p {
+            color: var(--text-gray);
+        }
+
+        /* Animations */
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 20px rgba(255, 0, 200, 0.5);
+            }
+            100% {
+                box-shadow: 0 0 30px rgba(0, 224, 255, 0.7);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.5s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .project-hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .project-hero-text {
+                padding-right: 0;
+                margin-bottom: 40px;
+            }
+
+            .project-details {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                width: 80%;
+                height: calc(100vh - 70px);
+                background: rgba(12, 0, 21, 0.95);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                padding-top: 50px;
+                transition: all 0.5s ease;
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                margin: 15px 0;
+            }
+
+            .project-hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+
+            .btn-group {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .project-hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header id="header">
+        <div class="container">
+        <nav class="navbar">
+                <a href="../index.html" class="logo">Noman Riaz</a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../index.html#about">About</a></li>
+                    <li><a href="../index.html#skills">Skills</a></li>
+                    <li><a href="../index.html#projects">Projects</a></li>
+                    <li><a href="../index.html#contact">Contact</a></li>
+                </ul>
+                <div class="hamburger">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Project Hero Section -->
+    <section class="project-hero">
+        <div class="container">
+            <div class="project-hero-content">
+                <div class="project-hero-text fade-in">
+                    <h1>Weather Dashboard</h1>
+                    <p>An interactive weather application with location-based forecasts and detailed weather information.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">JavaScript</span>
+                        <span class="project-tag">API Integration</span>
+                        <span class="project-tag">Responsive Design</span>
+                        <span class="project-tag">Weather Data</span>
+                    </div>
+                    <div class="btn-group">
+                        <a href="#" class="btn btn-primary">Live Demo</a>
+                        <a href="https://github.com/noman-riaz200" class="btn btn-outline">View Code</a>
+                    </div>
+                </div>
+                <div class="project-hero-image fade-in">
+                    <div class="project-mockup">
+                        <img src="../images/Weather-Dashboard.png" alt="Weather Dashboard">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Overview Section -->
+    <section id="overview">
+        <div class="container">
+            <div class="section-title">
+                <h2>Project Overview</h2>
+            </div>
+            <div class="project-details">
+                <div class="project-info fade-in">
+                    <h3 style="margin-bottom: 20px; color: var(--primary-cyan);">About This Project</h3>
+                    <p>The Weather Dashboard is a responsive web application that provides users with real-time weather information and forecasts. Users can search for any city worldwide and get current weather conditions along with a 5-day forecast.</p>
+                    <p>This project was built to demonstrate API integration, responsive design principles, and dynamic content rendering with JavaScript. The application fetches data from a weather API and displays it in an intuitive, user-friendly interface.</p>
+                    <p>Key challenges included handling API rate limits, implementing responsive design for various screen sizes, and creating an intuitive user experience for weather data visualization.</p>
+                </div>
+                <div class="project-features fade-in">
+                    <h3 style="margin-bottom: 20px; color: var(--primary-cyan);">Key Features</h3>
+                    <ul class="features-list">
+                        <li><i class="fas fa-check-circle"></i> <span>Current weather conditions for any city</span></li>
+                        <li><i class="fas fa-check-circle"></i> <span>5-day weather forecast with hourly details</span></li>
+                        <li><i class="fas fa-check-circle"></i> <span>Location-based weather using geolocation</span></li>
+                        <li><i class="fas fa-check-circle"></i> <span>Temperature unit conversion (Celsius/Fahrenheit)</span></li>
+                        <li><i class="fas fa-check-circle"></i> <span>Search history with quick access to previous searches</span></li>
+                        <li><i class="fas fa-check-circle"></i> <span>Responsive design for all device sizes</span></li>
+                        <li><i class="fas fa-check-circle"></i> <span>Weather icons and visual representations</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Stack Section -->
+    <section id="technology" style="background: rgba(25, 5, 45, 0.3);">
+        <div class="container">
+            <div class="section-title">
+                <h2>Technology Stack</h2>
+            </div>
+            <div class="tech-stack">
+                <div class="tech-item fade-in">
+                    <i class="fab fa-html5"></i>
+                    <h3>HTML5</h3>
+                </div>
+                <div class="tech-item fade-in">
+                    <i class="fab fa-css3-alt"></i>
+                    <h3>CSS3</h3>
+                </div>
+                <div class="tech-item fade-in">
+                    <i class="fab fa-js"></i>
+                    <h3>JavaScript</h3>
+                </div>
+                <div class="tech-item fade-in">
+                    <i class="fas fa-cloud"></i>
+                    <h3>Weather API</h3>
+                </div>
+                <div class="tech-item fade-in">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Responsive Design</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Gallery Section -->
+    <section id="gallery">
+        <div class="container">
+            <div class="section-title">
+                <h2>Project Gallery</h2>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item fade-in">
+                    <img src="../images/Weather-Dashboard-Main-Screen.png" alt="Weather Dashboard Main Screen">
+                </div>
+                <div class="gallery-item fade-in">
+                    <img src="../images/Weather-Dashboard-Search-Feature.png" alt="Weather Dashboard Search Feature">
+                </div>
+                <div class="gallery-item fade-in">
+                    <img src="../images/Weather-Dashboard-Mobile-View.png" alt="Weather Dashboard Mobile View">
+                </div>
+                <div class="gallery-item fade-in">
+                    <img src="../images/Weather-Dashboard-Forecast-Details.png" alt="Weather Dashboard Forecast Details">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Noman Riaz | All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sticky Header
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            hamburger.innerHTML = navLinks.classList.contains('active') 
+                ? '<i class="fas fa-times"></i>' 
+                : '<i class="fas fa-bars"></i>';
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Fade-in animation on scroll
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        const fadeInOnScroll = () => {
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        };
+        
+        window.addEventListener('scroll', fadeInOnScroll);
+        // Initial check on page load
+        fadeInOnScroll();
+    </script>
+</body>
+</html>
